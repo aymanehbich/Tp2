@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 public class SommeArgentTest {
+// Test de la classe SommeArgent
   @Test
   void testEgalite() {
   SommeArgent s1 = new SommeArgent(50, "EUR");
