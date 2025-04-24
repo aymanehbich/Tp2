@@ -2,34 +2,29 @@ name: Java CI with Maven
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ master ]
   pull_request:
-    branches: [ "main" ]
-
-permissions:
-  contents: read
-  id-token: write
-  actions: read
-  security-events: write  # Required for dependency submission
+    branches: [ master ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+    - uses: actions/checkout@v3
 
     - name: Set up JDK 17
-      uses: actions/setup-java@v4
+      uses: actions/setup-java@v3
       with:
         java-version: '17'
         distribution: 'temurin'
-        cache: maven
 
-    - name: Build with Maven
-      run: mvn -B package --file pom.xml
+    - name: Run tests with Maven
+      run: mvn test
 
-    - name: Submit dependency graph
-      if: github.repository == 'aymanehbich/Tp2'  # Prevent errors on forks
-      uses: advanced-security/maven-dependency-submission-action@v1.1.0
+    - name: Upload test report
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: surefire-reports
+        path: target/surefire-reports
